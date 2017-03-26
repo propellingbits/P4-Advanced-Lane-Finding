@@ -2,9 +2,9 @@ import numpy as np
 import cv2
 import glob
 import matplotlib.pyplot as plt
-%matplotlib qt
+#%matplotlib qt
 import pickle
-%matplotlib inline
+import matplotlib.image as mpimg
 
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 objp = np.zeros((6*8,3), np.float32)
@@ -34,7 +34,7 @@ for idx, fname in enumerate(images):
         cv2.drawChessboardCorners(img, (8,6), corners, ret)
         #write_name = 'corners_found'+str(idx)+'.jpg'
         #cv2.imwrite(write_name, img)
-        cv2.imshow('img', img)
+        #cv2.imshow('img', img)
         cv2.waitKey(500)
 
 cv2.destroyAllWindows()
