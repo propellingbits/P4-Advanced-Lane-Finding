@@ -18,7 +18,7 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./examples/Thresh-bin.png "Road Transformed"
+[image2]: ./examples/Thresh-bin-2.png "Road Transformed"
 [image3]: ./examples/combined-threshold.png "Binary Example"
 [image4]: ./examples/persp-trans.png "Warp Example"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
@@ -49,12 +49,17 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 ###Pipeline (single images)
 
 ####1. Provide an example of a distortion-corrected image.
+
 To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
+
 ![alt text][image2]
+
 ####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+
 I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at cell # 14 in my notebook).  Here's an example of my output for this step.  
 
 I ran a test (cell #187) on test-images provided by udacity to check the quality of my pipeline (cell # 11). For results, please refer to second image below.
+
 ![alt text][image7]
 ![alt text][image4]
 
@@ -98,7 +103,28 @@ For fitting a polynomial to the detections, I took reference from lessons and co
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in cell # 247 (measuringCurvature()) in my notebook
+I did this in cell # 247 (measuringCurvature()) in my notebook.
+
+In the sliding_windows() function, I have located the lane line pixels, used their x and y pixel positions to fit a second order polynomial curve:
+
+f(y)=Ay​2+By+C
+
+We are fitting for f(y), rather than f(x), because the lane lines in the warped image are near vertical and may have the same x value for more than one y value.
+
+The y values of image increase from top to bottom, so if, for example, we wanted to measure the radius of curvature closest to our vehicle, we could evaluate the formula above at the y value corresponding to the bottom of your image, or in Python, at yvalue = image.shape[0].
+
+The radius of curvature is based upon [this link](http://www.intmath.com/applications-differentiation/8-radius-curvature.php) and calculated in cell # 247 (measuringCurvature()) using below code line :
+```
+curve_radius = ((1 + (2*fit[0]*y_0*y_meters_per_pixel + fit[1])**2)**1.5) / np.absolute(2*fit[0])
+```
+In this example, `fit[0]` is the first coefficient (the y-squared coefficient) of the second order polynomial fit, and `fit[1]` is the second (y) coefficient. `y_0` is the y position within the image upon which the curvature calculation is based (the bottom-most y - the position of the car in the image - was chosen). `y_meters_per_pixel` is the factor used for converting from pixels to meters. This conversion was also used to generate a new fit with coefficients in terms of meters. 
+
+The position of the vehicle with respect to the center of the lane is calculated with the following lines of code:
+```
+lane_center_position = (r_fit_x_int + l_fit_x_int) / 2
+center_dist = (pov_wrtcl - lane_center_position) * xm_per_pix
+```
+`r_fit_x_int` and `l_fit_x_int` are the x-intercepts of the right and left fits, respectively. This requires evaluating the fit at the maximum y value (719, in this case - the bottom of the image) because the minimum y value is actually at the top (otherwise, the constant coefficient of each fit would have sufficed). The car position is the difference between these intercept points and the image midpoint (assuming that the camera is mounted at the center of the vehicle).
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
