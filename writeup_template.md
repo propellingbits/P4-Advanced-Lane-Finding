@@ -24,6 +24,7 @@ The goals / steps of this project are the following:
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
+[image7]: ./examples/lane-detection.png "Pipeline Output"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 ###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -53,7 +54,9 @@ To demonstrate this step, I will describe how I apply the distortion correction 
 ####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at cell # 14 in my notebook).  Here's an example of my output for this step.  
 
-![alt text][image3]
+I ran a test (cell #187) on test-images provided by udacity to check the quality of my pipeline (cell # 11). For results, please refer to second image below.
+![alt text][image7]
+![alt text][image4]
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
@@ -87,7 +90,11 @@ I verified that my perspective transform was working as expected by drawing the 
 
 My lane lines with a 2nd order polynomial looks like following image. Code for the same can be found in notebook at cell #3 (sliding_windows())
 
-![alt text][image5]
+I will say this was the toughest part of this project for me. I played with HSV and HLS color spaces. Also played with gradients and sobel operators. It did not give me satisfying result. Along the way, I learnt, to begin with, the input image must be undistorted one and it must also be warped before proceeding further. After this, I thresholded channel L of HLS and channel B of LAB color space. At the end, I combined the result of both of these operations. I arrived here after some failures, experiments and searches. Corresponding code can be found in cell # 181 (finalPipeline()).
+
+For fitting a polynomial to the detections, I took reference from lessons and code. In cell number 24, output from pipeline is passed on to sliding_window_polyfit function. This function first draws a histogram on lower half of the images. It does a good job of drawing the peaks where we have lane lines as it is a binary image and we have 1 values where lane lines are located.  This was used as a starting point for where to search for the lines. From that point, I slided a window, placed around the line centers, to find and follow the lines up to the top of the frame.
+
+![alt text][image7]
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
