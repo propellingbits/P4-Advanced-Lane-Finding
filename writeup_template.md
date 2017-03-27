@@ -61,6 +61,7 @@ I used a combination of color and gradient thresholds to generate a binary image
 I ran a test (cell #187) on test-images provided by udacity to check the quality of my pipeline (cell # 11). For results, please refer to second image below.
 
 ![alt text][image7]
+
 ![alt text][image4]
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
@@ -124,7 +125,7 @@ The position of the vehicle with respect to the center of the lane is calculated
 lane_center_position = (r_fit_x_int + l_fit_x_int) / 2
 center_dist = (pov_wrtcl - lane_center_position) * xm_per_pix
 ```
-`r_fit_x_int` and `l_fit_x_int` are the x-intercepts of the right and left fits, respectively. This requires evaluating the fit at the maximum y value (719, in this case - the bottom of the image) because the minimum y value is actually at the top (otherwise, the constant coefficient of each fit would have sufficed). The car position is the difference between these intercept points and the image midpoint (assuming that the camera is mounted at the center of the vehicle).
+`r_fit_x_int` and `l_fit_x_int` are the x-intercepts of the right and left fits, respectively. I calculated POV by assuming that the center of the image represents the center of the car, and the offset is the distance between the center of the image and the center of the lane.
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
