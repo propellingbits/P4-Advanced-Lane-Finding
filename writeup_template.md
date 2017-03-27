@@ -25,6 +25,7 @@ The goals / steps of this project are the following:
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
 [image7]: ./examples/lane-detection.png "Pipeline Output"
+[image8]: ./examples/Thresh-bin-3.png "Polynomial fit"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 ###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -101,6 +102,8 @@ I will say this was the toughest part of this project for me. I played with HSV 
 For fitting a polynomial to the detections, I took reference from lessons and code. In cell number 24, output from pipeline is passed on to sliding_window_polyfit function. This function first draws a histogram on lower half of the images. It does a good job of drawing the peaks where we have lane lines as it is a binary image and we have 1 values where lane lines are located.  This was used as a starting point for where to search for the lines. From that point, I slided a window, placed around the line centers, to find and follow the lines up to the top of the frame.
 
 ![alt text][image7]
+
+![alt text][image8]
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
